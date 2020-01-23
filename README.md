@@ -1,3 +1,13 @@
+# usage
+```
+pipenv --python 3
+pipenv install
+pipenv shell
+> (follow the instructions below)
+```
+
+---
+
 <p align="center">
   <img height="150px" src="./logo.png"  alt="EKS Rolling Update" title="EKS Rolling Update">
 </p>
