@@ -100,23 +100,25 @@ eks-rolling-update.py -c my-eks-cluster
 
 ## Configuration
 
-| Parameter                 | Description                                                                                                        | Default                              |
-|---------------------------|--------------------------------------------------------------------------------------------------------------------|--------------------------------------|
-| K8S_AUTOSCALER_ENABLED    | If True Kubernetes Autoscaler will be paused before running update                                                 | False                                 |
-| K8S_AUTOSCALER_NAMESPACE  | Namespace where Kubernetes Autoscaler is deployed                                                                  | "default"                                   |
-| K8S_AUTOSCALER_DEPLOYMENT | Deployment name of Kubernetes Autoscaler                                                                           | "cluster-autoscaler"                                   |
-| ASG_DESIRED_STATE_TAG     | Temporary tag which will be saved to the ASG to store the state of the EKS cluster prior to update                 | eks-rolling-update:desired_capacity  |
-| ASG_ORIG_CAPACITY_TAG     | Temporary tag which will be saved to the ASG to store the state of the EKS cluster prior to update                 | eks-rolling-update:original_capacity |
-| ASG_ORIG_MAX_CAPACITY_TAG | Temporary tag which will be saved to the ASG to store the state of the EKS cluster prior to update                 | eks-rolling-update:original_max_capacity |
-| CLUSTER_HEALTH_WAIT       | Number of seconds to wait after ASG has been scaled up before checking health of the cluster                       | 90                                   |
-| GLOBAL_MAX_RETRY          | Number of attempts of a health check                                                                               | 12                                   |
-| GLOBAL_HEALTH_WAIT        | Number of seconds to wait before retrying a health check                                                           | 20                                   |
-| BETWEEN_NODES_WAIT        | Number of seconds to wait after removing a node before continuing on                                               | 0                                    |
-| RUN_MODE                  | See Run Modes section below                                                                                        | 1                                    |
-| DRY_RUN                   | If True, only a query will be run to determine which worker nodes are outdated without running an update operation | False                                |
+| Parameter                 | Description                                                                                                           | Default                                  |
+|---------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------|
+| K8S_AUTOSCALER_ENABLED    | If True Kubernetes Autoscaler will be paused before running update                                                    | False                                    |
+| K8S_AUTOSCALER_NAMESPACE  | Namespace where Kubernetes Autoscaler is deployed                                                                     | "default"                                |
+| K8S_AUTOSCALER_DEPLOYMENT | Deployment name of Kubernetes Autoscaler                                                                              | "cluster-autoscaler"                     |
+| K8S_AUTOSCALER_REPLICAS   | Number of replicas to scale back up to after Kubernentes Autoscaler paused                                            | 2                                        |
+| ASG_DESIRED_STATE_TAG     | Temporary tag which will be saved to the ASG to store the state of the EKS cluster prior to update                    | eks-rolling-update:desired_capacity      |
+| ASG_ORIG_CAPACITY_TAG     | Temporary tag which will be saved to the ASG to store the state of the EKS cluster prior to update                    | eks-rolling-update:original_capacity     |
+| ASG_ORIG_MAX_CAPACITY_TAG | Temporary tag which will be saved to the ASG to store the state of the EKS cluster prior to update                    | eks-rolling-update:original_max_capacity |
+| CLUSTER_HEALTH_WAIT       | Number of seconds to wait after ASG has been scaled up before checking health of the cluster                          | 90                                       |
+| GLOBAL_MAX_RETRY          | Number of attempts of a health check                                                                                  | 12                                       |
+| GLOBAL_HEALTH_WAIT        | Number of seconds to wait before retrying a health check                                                              | 20                                       |
+| BETWEEN_NODES_WAIT        | Number of seconds to wait after removing a node before continuing on                                                  | 0                                        |
+| RUN_MODE                  | See Run Modes section below                                                                                           | 1                                        |
+| DRY_RUN                   | If True, only a query will be run to determine which worker nodes are outdated without running an update operation    | False                                    |
+| EXTRA_DRAIN_ARGS          | Additional space-delimited args to supply to the `kubectl drain` function, e.g `--force=true`. See `kubectl drain -h` | ""                                       |
 
 ## Run Modes
-There are a number of different values which can be set for the `RUN_MODE` environment variable. 
+There are a number of different values which can be set for the `RUN_MODE` environment variable.
 
 `1` is the default.
 
@@ -171,7 +173,7 @@ Each of them have different advantages and disadvantages.
   ```
   # you can use .env file within your project directory to load updater settings
   # e.g:
-  
+
   $ cat .env
   DRY_RUN=1
   $
@@ -180,7 +182,7 @@ Each of them have different advantages and disadvantages.
 <a name="docker"></a>
 ## Docker
 
-Although no public Docker image is currently published for this project, feel free to use the included [Dockerfile](Dockerfile) to build your own image. `docker build -t eks-rolling-update:latest .` 
+Although no public Docker image is currently published for this project, feel free to use the included [Dockerfile](Dockerfile) to build your own image. `docker build -t eks-rolling-update:latest .`
 
 After building the image, run using the command
 ```bash
