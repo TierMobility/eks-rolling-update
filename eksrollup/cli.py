@@ -224,13 +224,15 @@ def main(args=None):
                         help='the cluster name to perform rolling update on')
     parser.add_argument('--plan', '-p', action='store_const', const=True,
                         help='perform a dry run to see which instances are out of date')
+    parser.add_argument('--node_group_name', '-n', default="",
+                        help='only drain selected asg/node group')             
     args = parser.parse_args(args)
     # check kubectl is installed
     kctl = shutil.which('kubectl')
     if not kctl:
         logger.info('kubectl is required to be installed before proceeding')
         quit(1)
-    filtered_asgs = get_asgs(args.cluster_name)
+    filtered_asgs = get_asgs(args.cluster_name, args.node_group_name)
     # perform a dry run
     if args.plan:
         plan_asgs(filtered_asgs)
