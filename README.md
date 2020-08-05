@@ -86,6 +86,8 @@ optional arguments:
                         the cluster name to perform rolling update on
   --plan, -p            perform a dry run to see which instances are out of
                         date
+  --node_group_name NODE_GROUP_NAME, -n NODE_GROUP_NAME
+                        only drain selected asg/node group
 ```
 
 Example:
